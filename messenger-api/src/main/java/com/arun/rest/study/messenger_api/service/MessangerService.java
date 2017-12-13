@@ -2,6 +2,7 @@ package com.arun.rest.study.messenger_api.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,26 @@ public class MessangerService {
 	
 	public List<Message> getAllMessages(){
 		return new ArrayList<Message>(messages.values());		
+	}
+	
+	public List<Message> getAllMessagesForYear(int year){
+		List<Message> messagesForYear = new ArrayList<>();
+		Calendar cal = Calendar.getInstance();
+		for(Message message : messages.values()) {
+			if(cal.get(Calendar.YEAR) == year) {
+				messagesForYear.add(message);
+			}
+		}
+		return messagesForYear;
+	}
+	
+	public List<Message> getMessagePaginated(int start, int end){
+		
+		ArrayList<Message> messageList = new ArrayList<Message>(messages.values());
+		if(start+end > messageList.size()) {
+			return messageList;
+		}
+		return messageList.subList(start, start+end);
 	}
 	
 	public Message addMessage(Message message) {

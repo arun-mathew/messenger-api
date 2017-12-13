@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.arun.rest.study.messenger_api.model.Message;
@@ -24,14 +25,22 @@ public class MessageController {
 	MessangerService messangerService = new MessangerService();
 	
 	@GET
-	public List<Message> getMessage()
-	{
+	public List<Message> getMessages(@QueryParam("year") int year,
+			                         @QueryParam("start") int start,
+			                         @QueryParam("end") int end){
+		
+		if(year > 0) {
+			return messangerService.getAllMessagesForYear(year);
+		}
+		if(start >= 0 && end >= 0) {
+			return messangerService.getMessagePaginated(start, end);
+		}
 		return messangerService.getAllMessages();
 	}
 	
 	@GET
 	@Path("/{messageId}")
-		public Message getMassage(@PathParam("messageId") long id)
+	public Message getMassage(@PathParam("messageId") long id)
 	{
 		return messangerService.getMessage(id);
 	}
